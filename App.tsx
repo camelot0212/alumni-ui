@@ -26,7 +26,9 @@ import {
   ToggleRight,
   Briefcase,
   GraduationCap,
-  Building2
+  Building2,
+  Share2,
+  MoreHorizontal
 } from 'lucide-react';
 import PostCard from './components/PostCard';
 import { MOCK_POSTS, USERS, MOCK_EVENTS } from './constants';
@@ -213,8 +215,10 @@ const BottomNav = () => {
   );
 };
 
-// 4. Header
-const Header = ({ title }: { title: string }) => (
+// 4. Headers
+
+// Standard Header with Search (for main pages)
+const MainHeader = ({ title }: { title: string }) => (
   <header className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-10 px-4 h-16 flex items-center justify-between">
     <div className="md:hidden">
       <span className="font-bold text-lg text-indigo-600">Alumni</span>
@@ -243,6 +247,33 @@ const Header = ({ title }: { title: string }) => (
     </div>
   </header>
 );
+
+// Detail Header with Back Button (for post/event details)
+const DetailHeader = ({ title }: { title: string }) => {
+  const navigate = useNavigate();
+  return (
+    <header className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-200 z-20 px-4 h-16 flex items-center justify-between">
+      <div className="flex items-center gap-3 overflow-hidden">
+        <button 
+          onClick={() => navigate(-1)}
+          className="p-2 -ml-2 text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+        >
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+        <h2 className="text-lg font-bold text-gray-900 truncate">{title}</h2>
+      </div>
+
+      <div className="flex items-center gap-1 flex-shrink-0">
+        <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+          <Share2 className="w-5 h-5" />
+        </button>
+        <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+          <MoreHorizontal className="w-5 h-5" />
+        </button>
+      </div>
+    </header>
+  );
+};
 
 // --- Pages ---
 
@@ -309,16 +340,12 @@ const FeedPage = () => {
 // Page: Post Detail
 const PostDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const post = MOCK_POSTS.find(p => p.id === id);
 
   if (!post) return <div className="p-4 text-center text-gray-500">Post not found</div>;
 
   return (
     <div className="max-w-2xl mx-auto py-4 px-4 pb-24 md:pb-8">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-600 mb-4 hover:text-indigo-600 font-medium">
-        <ArrowLeft className="w-5 h-5" /> Back
-      </button>
       <PostCard post={post} isDetailView={true} />
     </div>
   );
@@ -406,7 +433,6 @@ const EventsPage = () => {
 // Page: Event Detail
 const EventDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const event = MOCK_EVENTS.find(e => e.id === id);
 
   if (!event) return <div className="p-4 text-center text-gray-500">Event not found</div>;
@@ -418,13 +444,6 @@ const EventDetailPage = () => {
             <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             
-            <button 
-              onClick={() => navigate(-1)} 
-              className="absolute top-4 left-4 bg-black/30 backdrop-blur-md text-white p-2 rounded-full hover:bg-black/50 transition-colors z-20"
-            >
-               <ArrowLeft className="w-6 h-6" />
-            </button>
-
             <div className="absolute bottom-0 left-0 p-6 text-white w-full z-10">
                <span className="inline-block px-2 py-1 rounded bg-indigo-600 text-xs font-bold mb-2 uppercase tracking-wide">
                  Event
@@ -756,10 +775,18 @@ const Layout = () => {
     return 'Alumni';
   };
 
+  // Determine if we are in a Detail View
+  const isDetailView = location.pathname.startsWith('/post/') || location.pathname.startsWith('/event/');
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900 pb-16 md:pb-0 md:pl-64">
       <Sidebar />
-      <Header title={getTitle()} />
+      {/* Switch between MainHeader and DetailHeader */}
+      {isDetailView ? (
+        <DetailHeader title={getTitle()} />
+      ) : (
+        <MainHeader title={getTitle()} />
+      )}
       <main>
         <Routes>
           <Route path="/" element={<FeedPage />} />
