@@ -30,8 +30,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetailView = false }) => {
   const isMedical = post.type === PostType.MEDICAL;
   
   // Dynamic styling based on post type (Medical gets green tint/border)
+  // Removed mb-4 to allow parent container to handle consistent spacing
   const containerClasses = `
-    bg-white rounded-xl shadow-sm border overflow-hidden mb-4 transition-all duration-200
+    bg-white rounded-xl shadow-sm border overflow-hidden transition-all duration-200
     ${isMedical ? 'border-emerald-200 bg-emerald-50/30' : 'border-gray-200'}
   `;
 

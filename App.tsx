@@ -28,7 +28,8 @@ import {
   GraduationCap,
   Building2,
   Share2,
-  MoreHorizontal
+  MoreHorizontal,
+  Plus
 } from 'lucide-react';
 import PostCard from './components/PostCard';
 import { MOCK_POSTS, USERS, MOCK_EVENTS } from './constants';
@@ -253,17 +254,18 @@ const DetailHeader = ({ title }: { title: string }) => {
   const navigate = useNavigate();
   return (
     <header className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-200 z-20 px-4 h-16 flex items-center justify-between">
-      <div className="flex items-center gap-3 overflow-hidden">
+      {/* Fixed: Removed overflow-hidden and added min-w-0 to fix back button clipping */}
+      <div className="flex items-center gap-3 flex-1 min-w-0">
         <button 
           onClick={() => navigate(-1)}
-          className="p-2 -ml-2 text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 -ml-2 text-gray-700 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
         >
           <ArrowLeft className="w-6 h-6" />
         </button>
         <h2 className="text-lg font-bold text-gray-900 truncate">{title}</h2>
       </div>
 
-      <div className="flex items-center gap-1 flex-shrink-0">
+      <div className="flex items-center gap-1 flex-shrink-0 ml-2">
         <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
           <Share2 className="w-5 h-5" />
         </button>
@@ -358,9 +360,15 @@ const EventsPage = () => {
     <div className="max-w-3xl mx-auto py-6 px-4 pb-24 md:pb-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-bold text-gray-900">Upcoming Events</h2>
-        <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
-          View Past
-        </button>
+        {/* New Create Event Button */}
+        <div className="flex gap-3">
+          <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800 px-2">
+            View Past
+          </button>
+          <button className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95">
+            <Plus className="w-4 h-4" /> Create Event
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-6">
