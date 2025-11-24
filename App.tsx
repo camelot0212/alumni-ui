@@ -210,7 +210,7 @@ const BottomNav = () => {
       </NavLink>
       <NavLink to="/profile" className={linkClass}>
         <UserCircle className="w-6 h-6" />
-        <span className="text-[10px] font-medium mt-1">You</span>
+        <span className="text-[10px] font-medium mt-1">Profile</span>
       </NavLink>
     </div>
   );
