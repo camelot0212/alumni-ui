@@ -9,39 +9,39 @@
     <style>
       body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
       
-      /* --- Modern Scrollbar Reset --- */
-      /* Webkit (Chrome, Safari, Edge) */
+      /* Modern Scrollbar - Chrome/Safari/Edge */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
-      }
-      ::-webkit-scrollbar-button {
-        display: none; /* Removes the up/down arrows */
       }
       ::-webkit-scrollbar-track {
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; /* Gray-300 */
+        background: #d1d5db;
         border-radius: 10px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; /* Gray-400 */
+        background: #9ca3af;
       }
 
-      /* Firefox */
-      * {
-        scrollbar-width: thin;
-        scrollbar-color: #cbd5e1 transparent;
+      /* Hide arrows/buttons on scrollbars */
+      ::-webkit-scrollbar-button {
+        display: none;
       }
 
-      /* Utility to completely hide scrollbar */
+      /* Utility to hide scrollbar but keep functionality */
       .no-scrollbar::-webkit-scrollbar {
           display: none;
       }
       .no-scrollbar {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+      
+      /* Safe area padding for iPhones */
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
       }
     </style>
   <script type="importmap">

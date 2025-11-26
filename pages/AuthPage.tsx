@@ -1,132 +1,76 @@
+
 import React, { useState } from 'react';
-import { GraduationCap, UserCircle, Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from 'lucide-react';
+import { GraduationCap, UserCircle, Mail, Shield, Eye, EyeOff } from 'lucide-react';
 
-interface AuthPageProps {
-  onLogin: () => void;
-}
-
-const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
+export const AuthPage = ({ onLogin }: { onLogin: () => void }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // Simulate API call
+    setLoading(true);
     setTimeout(() => {
-      setIsLoading(false);
+      setLoading(false);
       onLogin();
     }, 1500);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-200/40 rounded-full blur-3xl" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-violet-200/40 rounded-full blur-3xl" />
-      </div>
-
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl border border-gray-100 overflow-hidden relative z-10">
-        <div className="p-8 pb-6 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-xl mb-4 text-indigo-600">
-             <GraduationCap className="w-7 h-7" />
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-6 relative overflow-hidden">
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-200 rounded-full blur-[100px] opacity-30"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200 rounded-full blur-[100px] opacity-30"></div>
+      
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 relative z-10 animate-in fade-in zoom-in-95 duration-500">
+        <div className="text-center mb-8">
+          <div className="inline-flex p-3 bg-indigo-50 rounded-2xl mb-4 text-indigo-600">
+            <GraduationCap className="w-10 h-10" />
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent mb-2">
-             Alumni Network
-          </h1>
-          <p className="text-gray-500 text-sm">
-            {isLogin ? 'Welcome back! Please sign in to continue.' : 'Join the exclusive network for alumni.'}
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+          <p className="text-gray-500">Connect with your alumni network</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="px-8 pb-8 space-y-4">
-          {!isLogin && (
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-gray-500 uppercase ml-1">Full Name</label>
-              <div className="relative">
-                <UserCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input 
-                  type="text" 
-                  placeholder="e.g. Nguyen Van A"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-                />
-              </div>
-            </div>
-          )}
+        <div className="flex p-1 bg-gray-100 rounded-xl mb-8 relative">
+          <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-lg shadow-sm transition-all duration-300 ${isLogin ? 'left-1' : 'left-[calc(50%+4px)]'}`}></div>
+          <button onClick={() => setIsLogin(true)} className={`flex-1 py-2 text-sm font-bold relative z-10 transition-colors ${isLogin ? 'text-gray-900' : 'text-gray-500'}`}>Sign In</button>
+          <button onClick={() => setIsLogin(false)} className={`flex-1 py-2 text-sm font-bold relative z-10 transition-colors ${!isLogin ? 'text-gray-900' : 'text-gray-500'}`}>Sign Up</button>
+        </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Email Address</label>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {!isLogin && (
+             <div className="space-y-1.5">
+               <label className="text-xs font-bold text-gray-900 ml-1">Full Name</label>
+               <div className="relative">
+                 <UserCircle className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                 <input type="text" className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="John Doe" />
+               </div>
+             </div>
+          )}
+          
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-gray-900 ml-1">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input 
-                type="email" 
-                placeholder="you@example.com"
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-              />
+              <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input type="email" className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="name@example.com" />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex justify-between items-center ml-1">
-               <label className="text-xs font-bold text-gray-500 uppercase">Password</label>
-               {isLogin && <button type="button" className="text-xs font-medium text-indigo-600 hover:underline">Forgot?</button>}
-            </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-gray-900 ml-1">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="••••••••"
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-12 py-2.5 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-              />
-              <button 
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              <Shield className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input type={showPassword ? "text" : "password"} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="••••••••" />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
 
-          {!isLogin && (
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                 <label className="text-xs font-bold text-gray-500 uppercase ml-1">Class</label>
-                 <input type="text" placeholder="e.g. K12B" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
-              </div>
-              <div className="space-y-1">
-                 <label className="text-xs font-bold text-gray-500 uppercase ml-1">Major</label>
-                 <input type="text" placeholder="e.g. Hoá" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
-              </div>
-            </div>
-          )}
-
-          <button 
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-2"
-          >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (isLogin ? 'Sign In' : 'Create Account')}
-            {!isLoading && <ArrowRight className="w-5 h-5" />}
+          <button disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2">
+            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : (isLogin ? 'Sign In' : 'Create Account')}
           </button>
         </form>
-
-        <div className="p-4 bg-gray-50 text-center border-t border-gray-100">
-          <p className="text-sm text-gray-600">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
-            <button 
-              onClick={() => setIsLogin(!isLogin)}
-              className="font-bold text-indigo-600 hover:underline"
-            >
-              {isLogin ? 'Sign up' : 'Log in'}
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );
 };
-
-export default AuthPage;
