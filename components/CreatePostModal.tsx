@@ -77,7 +77,7 @@ const CreatePostModal = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       {/* Container: Fixed Height h-[85vh] to prevent jitter, rounded corners */}
-      <div className="bg-white w-full max-w-xl h-[85vh] rounded-2xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden relative">
+      <div className="bg-white w-full max-w-xl h-[85vh] rounded-2xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden relative m-4">
         
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white z-10 flex-shrink-0">

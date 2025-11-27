@@ -158,7 +158,7 @@ const EventDetailPage = () => {
                  </div>
                  
                  {/* Featured Latest Update */}
-                 <div className="bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-100 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                 <div className="bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-100 rounded-xl pt-5 pb-8 px-5 shadow-sm relative overflow-hidden">
                     <div className="flex items-center gap-2 mb-2 relative z-10">
                        <div className="p-1 rounded bg-indigo-600 text-white">
                          <Megaphone className="w-3 h-3" />
@@ -167,39 +167,32 @@ const EventDetailPage = () => {
                        <span className="text-xs text-gray-400 font-medium">• {updates[0].time}</span>
                     </div>
                     <p className="text-gray-900 font-medium text-sm leading-relaxed relative z-10 pl-0">{updates[0].text}</p>
+                    
+                    {/* Centered Circular Toggle Button */}
+                    {updates.length > 1 && (
+                      <div className="absolute bottom-0 left-0 right-0 flex justify-center translate-y-1/2 z-20">
+                        <button 
+                          onClick={() => setShowAllUpdates(!showAllUpdates)}
+                          className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-all active:scale-95"
+                        >
+                          {showAllUpdates ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    )}
                  </div>
 
-                 {/* Expansion Toggle */}
-                 {updates.length > 1 && (
-                    <div className="mt-4">
-                       {!showAllUpdates ? (
-                          <button 
-                             onClick={() => setShowAllUpdates(true)}
-                             className="text-sm font-bold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors"
-                          >
-                             View 4 older updates <ChevronDown className="w-4 h-4" />
-                          </button>
-                       ) : (
-                          <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                             {/* Older Updates List */}
-                             {updates.slice(1).map((update) => (
-                                <div key={update.id} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                   <div className="flex items-center gap-2 mb-1">
-                                      <span className="text-xs font-bold text-gray-500">Update</span>
-                                      <span className="text-xs text-gray-400">{update.time}</span>
-                                   </div>
-                                   <p className="text-gray-700 text-sm leading-relaxed">{update.text}</p>
-                                </div>
-                             ))}
-                             
-                             <button 
-                                onClick={() => setShowAllUpdates(false)}
-                                className="text-sm font-bold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors pt-2"
-                             >
-                                Show less <ChevronUp className="w-4 h-4" />
-                             </button>
+                 {/* Older Updates - Expanded View */}
+                 {updates.length > 1 && showAllUpdates && (
+                    <div className="mt-6 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                       {updates.slice(1).map((update) => (
+                          <div key={update.id} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                             <div className="flex items-center gap-2 mb-1">
+                                <span className="text-xs font-bold text-gray-500">Update</span>
+                                <span className="text-xs text-gray-400">{update.time}</span>
+                             </div>
+                             <p className="text-gray-700 text-sm leading-relaxed">{update.text}</p>
                           </div>
-                       )}
+                       ))}
                     </div>
                  )}
              </section>
@@ -248,7 +241,10 @@ const EventDetailPage = () => {
                          <div className="flex-1">
                             {/* Comment Bubble */}
                             <div className="bg-gray-50 rounded-2xl rounded-tl-none px-4 py-2.5 border border-gray-100 inline-block relative group min-w-[200px]">
-                               <span className="font-bold text-gray-900 text-sm block mb-0.5">{c.user.name}</span>
+                               <div className="flex items-center gap-2 mb-0.5">
+                                 <span className="font-bold text-gray-900 text-sm">{c.user.name}</span>
+                                 <span className="text-xs text-gray-400 font-medium">• {c.time}</span>
+                               </div>
                                <p className="text-gray-800 text-sm leading-relaxed">{c.content}</p>
                                {c.image && (
                                   <img src={c.image} className="mt-3 rounded-lg w-full max-w-sm object-cover h-40 border border-gray-200 block" />
@@ -265,7 +261,6 @@ const EventDetailPage = () => {
 
                             {/* Interactions Row - Outside Bubble */}
                             <div className="flex items-center gap-4 mt-1.5 ml-2">
-                               <span className="text-xs font-medium text-gray-400">{c.time}</span>
                                <button 
                                  onClick={() => handleCommentLike(c.id)}
                                  className={`text-xs font-bold flex items-center gap-1 transition-colors ${c.isLiked ? 'text-pink-600' : 'text-gray-500 hover:text-gray-800'}`}

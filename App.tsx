@@ -25,8 +25,6 @@ const ContactModal = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-        // ... (Modal Content kept same as provided file, but for brevity assume it's here or I can implement full if needed. The prompt implies just swapping CreatePostModal) ...
-        {/* RE-IMPLEMENTING FULL CONTACT MODAL CONTENT TO BE SAFE */}
         <div className="relative h-24 bg-gradient-to-r from-indigo-500 to-purple-600">
           <button 
             onClick={closeContactModal}
@@ -131,6 +129,7 @@ const Layout = () => {
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Force re-render timestamp: 1716382000
   if (!isAuthenticated) return <AuthPage onLogin={() => setIsAuthenticated(true)} />;
 
   return (
