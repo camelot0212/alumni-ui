@@ -1,12 +1,11 @@
 
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, CheckCircle2, HelpCircle, MessageCircle, Send, Image as ImageIcon, X, Bell, ChevronDown, ChevronRight, User } from 'lucide-react';
+import { Calendar, MapPin, CheckCircle2, HelpCircle, Send, Image as ImageIcon, X, Megaphone, ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
 import { MOCK_EVENTS, USERS } from '../constants';
 
 const EventDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const event = MOCK_EVENTS.find(e => e.id === id);
   
   // States
@@ -21,7 +20,6 @@ const EventDetailPage = () => {
 
   const isOrganizer = event.organizer.id === USERS.me.id;
 
-  // Mock Data
   const galleryImages = [
     'https://picsum.photos/id/101/300/200',
     'https://picsum.photos/id/102/300/200', 
@@ -34,15 +32,12 @@ const EventDetailPage = () => {
     { id: 2, user: USERS.u3, content: "Check out the venue setup from last year!", time: "5h ago", image: "https://picsum.photos/id/20/400/300" }
   ];
 
-  // Mock Updates
   const updates = Array.from({ length: 5 }).map((_, i) => ({
     id: i,
-    text: i === 0 ? "⚠️ We've moved the venue to the Grand Ballroom on the 2nd floor. Please use the East Elevator." : `Update #${i}: Just a reminder to bring your tickets.`,
+    text: i === 0 ? "⚠️ We've moved the venue to the Grand Ballroom on the 2nd floor. Please use the East Elevator." : `Update #${i}: Just a reminder to bring your tickets and ID for check-in.`,
     time: `${i + 2}h ago`,
     isNew: i === 0
   }));
-
-  const displayedUpdates = showAllUpdates ? updates : updates.slice(0, 1);
 
   const handleRsvp = (status: 'going' | 'maybe') => {
     setRsvp(prev => prev === status ? null : status);
@@ -53,7 +48,6 @@ const EventDetailPage = () => {
        {/* Hero Image */}
        <div className="relative h-64 md:h-80 w-full bg-gray-100 group">
           <img src={event.image} className="w-full h-full object-cover" alt={event.title} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent md:hidden"></div>
        </div>
 
        <div className="max-w-3xl mx-auto px-4 sm:px-6 -mt-8 relative z-10">
@@ -69,7 +63,7 @@ const EventDetailPage = () => {
 
                <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 leading-tight">{event.title}</h1>
 
-               {/* Info Layout: 2 Lines */}
+               {/* Info Layout */}
                <div className="space-y-3">
                   <div className="flex items-center gap-3 text-gray-900">
                      <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
@@ -85,17 +79,17 @@ const EventDetailPage = () => {
                      <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
                         <MapPin className="w-5 h-5" />
                      </div>
-                     <p className="font-medium text-lg">{event.location}</p>
+                     <p className="font-medium text-lg text-gray-700">{event.location}</p>
                   </div>
                </div>
             </div>
 
-            {/* RSVP Section - Integrated Avatar Stack */}
+            {/* RSVP Section */}
             {!isOrganizer && (
               <div className="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
                  <div 
                     onClick={() => setShowAttendeesModal(true)}
-                    className="flex items-center gap-3 cursor-pointer group w-full md:w-auto"
+                    className="flex items-center gap-4 cursor-pointer group w-full md:w-auto"
                  >
                     <div className="flex items-center -space-x-3">
                         {event.attendees.slice(0, 3).map(u => (
@@ -107,7 +101,7 @@ const EventDetailPage = () => {
                     </div>
                     <div>
                         <p className="font-bold text-gray-900 text-sm group-hover:text-indigo-600 transition-colors">See who's going</p>
-                        <p className="text-xs text-gray-500 font-medium">19 friends going</p>
+                        <p className="text-xs text-gray-500 font-medium">Join 19 others</p>
                     </div>
                  </div>
 
@@ -136,48 +130,66 @@ const EventDetailPage = () => {
           </div>
 
           <div className="space-y-8">
-             {/* Host Updates - Sleek Timeline Style */}
+             {/* Host Updates - Clean Design, No Timeline Lines */}
              <section>
                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-gray-900 text-lg">Announcements <span className="text-gray-400 text-base font-normal">({updates.length})</span></h3>
+                    <h3 className="font-bold text-gray-900 text-lg">Announcements</h3>
                  </div>
                  
-                 <div className="relative border-l-2 border-gray-100 ml-3 pb-2">
-                    {displayedUpdates.map((update) => (
-                       <div key={update.id} className="mb-6 pl-6 relative">
-                          <div className={`absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-white ${update.isNew ? 'bg-indigo-600 shadow-[0_0_0_4px_rgba(79,70,229,0.1)]' : 'bg-gray-300'}`}></div>
-                          <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
-                             <div className="flex items-center justify-between mb-2">
-                                <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">{update.time}</span>
-                                {update.isNew && <span className="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>}
-                             </div>
-                             <p className="text-gray-800 text-sm leading-relaxed">{update.text}</p>
-                          </div>
-                       </div>
-                    ))}
+                 {/* Latest Update Card */}
+                 <div className="bg-gradient-to-r from-indigo-50/50 to-white border border-indigo-100 rounded-xl p-5 shadow-sm">
+                    <div className="flex items-center gap-2 mb-3">
+                       <Megaphone className="w-4 h-4 text-indigo-600" />
+                       <span className="text-xs font-bold text-indigo-700 uppercase tracking-wide">Latest Update</span>
+                       <span className="text-xs text-gray-400 font-medium">• {updates[0].time}</span>
+                    </div>
+                    <p className="text-gray-900 font-medium text-sm leading-relaxed">{updates[0].text}</p>
                  </div>
-                 
+
+                 {/* Expansion Button */}
                  {updates.length > 1 && (
-                    <button 
-                       onClick={() => setShowAllUpdates(!showAllUpdates)}
-                       className="ml-9 text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 -mt-4"
-                    >
-                       {showAllUpdates ? 'Show Less' : `View ${updates.length - 1} older updates`} <ChevronDown className={`w-4 h-4 transition-transform ${showAllUpdates ? 'rotate-180' : ''}`} />
-                    </button>
+                    <div className="mt-4">
+                       {!showAllUpdates ? (
+                          <button 
+                             onClick={() => setShowAllUpdates(true)}
+                             className="text-sm font-semibold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors"
+                          >
+                             View {updates.length - 1} older updates <ChevronDown className="w-4 h-4" />
+                          </button>
+                       ) : (
+                          <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
+                             {updates.slice(1).map((update) => (
+                                <div key={update.id} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                                   <div className="flex items-center justify-between mb-2">
+                                      <span className="text-xs font-bold text-gray-500">Update</span>
+                                      <span className="text-xs text-gray-400">{update.time}</span>
+                                   </div>
+                                   <p className="text-gray-700 text-sm leading-relaxed">{update.text}</p>
+                                </div>
+                             ))}
+                             
+                             <button 
+                                onClick={() => setShowAllUpdates(false)}
+                                className="text-sm font-semibold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors pt-2"
+                             >
+                                Show less <ChevronUp className="w-4 h-4" />
+                             </button>
+                          </div>
+                       )}
+                    </div>
                  )}
              </section>
 
              <div className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-8">
-                   {/* Hosted By - Above About */}
+                   {/* Hosted By - Strictly Above About */}
                    <section>
                       <h3 className="font-bold text-gray-900 text-lg mb-4">Hosted By</h3>
-                      <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4 shadow-sm">
-                         <img src={event.organizer.avatar} className="w-14 h-14 rounded-full border border-gray-100" />
+                      <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4 shadow-sm hover:border-indigo-200 transition-colors cursor-pointer group">
+                         <img src={event.organizer.avatar} className="w-14 h-14 rounded-full border border-gray-100 group-hover:scale-105 transition-transform" />
                          <div className="flex-1">
                             <p className="font-bold text-gray-900 text-base">{event.organizer.name}</p>
-                            <p className="text-xs text-gray-500 font-medium mb-1">{event.organizer.classYear} · {event.organizer.major}</p>
-                            <p className="text-xs text-gray-400">Event Organizer</p>
+                            <p className="text-xs text-gray-500 font-medium">{event.organizer.classYear} · {event.organizer.major}</p>
                          </div>
                       </div>
                    </section>
@@ -198,7 +210,7 @@ const EventDetailPage = () => {
                 </div>
                 <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
                    {galleryImages.map((img, i) => (
-                      <img key={i} src={img} className="h-32 w-48 object-cover rounded-lg flex-shrink-0 border border-gray-100" />
+                      <img key={i} src={img} className="h-32 w-48 object-cover rounded-lg flex-shrink-0 border border-gray-100 hover:opacity-90 transition-opacity cursor-pointer" />
                    ))}
                 </div>
              </section>
@@ -241,15 +253,15 @@ const EventDetailPage = () => {
                             className="flex-1 bg-transparent border-none focus:ring-0 text-sm py-2 placeholder:text-gray-400" 
                          />
                          
-                         {/* Grouped Actions: Attach & Send */}
-                         <div className="flex items-center gap-1 ml-2">
+                         {/* Grouped Actions: Attach & Send (Tight Spacing) */}
+                         <div className="flex items-center gap-0.5 ml-1">
                              <button 
                                onClick={() => !attachedImage && setAttachedImage('https://picsum.photos/id/50/200/200')}
-                               className={`p-2 rounded-full transition-colors ${attachedImage ? 'text-indigo-600 bg-indigo-50' : 'text-gray-400 hover:text-indigo-600 hover:bg-gray-50'}`}
+                               className={`p-1.5 rounded-full transition-colors ${attachedImage ? 'text-indigo-600 bg-indigo-50' : 'text-gray-400 hover:text-indigo-600 hover:bg-gray-50'}`}
                              >
                                 <ImageIcon className="w-5 h-5" />
                              </button>
-                             <button className={`p-2 rounded-full transition-colors ${commentText || attachedImage ? 'text-indigo-600 hover:bg-indigo-50 font-bold' : 'text-gray-300'}`}>
+                             <button className={`p-1.5 rounded-full transition-colors ${commentText || attachedImage ? 'text-indigo-600 hover:bg-indigo-50 font-bold' : 'text-gray-300'}`}>
                                 <Send className="w-5 h-5" />
                              </button>
                          </div>
