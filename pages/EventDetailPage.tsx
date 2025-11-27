@@ -65,7 +65,7 @@ const EventDetailPage = () => {
 
   return (
     <div className="bg-white min-h-screen pb-24">
-       {/* Hero Image */}
+       {/* Hero Image - Clean */}
        <div className="relative h-64 md:h-80 w-full bg-gray-100 group">
           <img src={event.image} className="w-full h-full object-cover" alt={event.title} />
        </div>
@@ -83,7 +83,7 @@ const EventDetailPage = () => {
 
                <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 leading-tight">{event.title}</h1>
 
-               {/* Info Layout */}
+               {/* Info Layout - 2 Lines */}
                <div className="space-y-3">
                   <div className="flex items-center gap-3 text-gray-900">
                      <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
@@ -104,9 +104,10 @@ const EventDetailPage = () => {
                </div>
             </div>
 
-            {/* RSVP Section */}
+            {/* RSVP Section - High Visibility Card */}
             {!isOrganizer && (
               <div className="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                 {/* Social Proof with Avatar Stack */}
                  <div 
                     onClick={() => setShowAttendeesModal(true)}
                     className="flex items-center gap-4 cursor-pointer group w-full md:w-auto"
@@ -125,6 +126,7 @@ const EventDetailPage = () => {
                     </div>
                  </div>
 
+                 {/* Action Buttons */}
                  <div className="flex w-full md:w-auto gap-2">
                     <button 
                        onClick={() => handleRsvp('maybe')}
@@ -151,31 +153,30 @@ const EventDetailPage = () => {
 
           <div className="space-y-8">
              
-             {/* Announcements - Modern Sleek Design */}
+             {/* Announcements - Sleek Card */}
              <section>
                  <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-gray-900 text-lg">Announcements</h3>
                  </div>
                  
                  {/* Featured Latest Update */}
-                 <div className="bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-100 rounded-xl pt-5 pb-8 px-5 shadow-sm relative overflow-hidden">
-                    <div className="flex items-center gap-2 mb-2 relative z-10">
-                       <div className="p-1 rounded bg-indigo-600 text-white">
-                         <Megaphone className="w-3 h-3" />
-                       </div>
+                 {/* Added pb-6 to prevent button cut-off */}
+                 <div className="bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-100 rounded-xl pt-5 pb-6 px-5 shadow-sm relative mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                       <Megaphone className="w-4 h-4 text-indigo-600" />
                        <span className="text-xs font-bold text-indigo-700 uppercase tracking-wide">Latest Update</span>
                        <span className="text-xs text-gray-400 font-medium">• {updates[0].time}</span>
                     </div>
-                    <p className="text-gray-900 font-medium text-sm leading-relaxed relative z-10 pl-0">{updates[0].text}</p>
+                    <p className="text-gray-900 font-medium text-sm leading-relaxed">{updates[0].text}</p>
                     
-                    {/* Centered Circular Toggle Button */}
-                    {updates.length > 1 && (
+                    {/* Centered Circular Toggle Button - Only show here if NOT expanded */}
+                    {!showAllUpdates && updates.length > 1 && (
                       <div className="absolute bottom-0 left-0 right-0 flex justify-center translate-y-1/2 z-20">
                         <button 
-                          onClick={() => setShowAllUpdates(!showAllUpdates)}
+                          onClick={() => setShowAllUpdates(true)}
                           className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-all active:scale-95"
                         >
-                          {showAllUpdates ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                          <ChevronDown className="w-4 h-4" />
                         </button>
                       </div>
                     )}
@@ -193,13 +194,23 @@ const EventDetailPage = () => {
                              <p className="text-gray-700 text-sm leading-relaxed">{update.text}</p>
                           </div>
                        ))}
+                       
+                       {/* Collapse Button - Moved here so it's at the end of the list */}
+                       <div className="flex justify-center pt-2">
+                          <button 
+                            onClick={() => setShowAllUpdates(false)}
+                            className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-all active:scale-95"
+                          >
+                            <ChevronUp className="w-4 h-4" />
+                          </button>
+                       </div>
                     </div>
                  )}
              </section>
 
              <div className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-8">
-                   {/* Hosted By */}
+                   {/* Hosted By - Above About */}
                    <section>
                       <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4 shadow-sm hover:border-indigo-200 transition-colors cursor-pointer group">
                          <img src={event.organizer.avatar} className="w-14 h-14 rounded-full border border-gray-100 group-hover:scale-105 transition-transform" />
@@ -241,6 +252,7 @@ const EventDetailPage = () => {
                          <div className="flex-1">
                             {/* Comment Bubble */}
                             <div className="bg-gray-50 rounded-2xl rounded-tl-none px-4 py-2.5 border border-gray-100 inline-block relative group min-w-[200px]">
+                               {/* Timestamp in Header */}
                                <div className="flex items-center gap-2 mb-0.5">
                                  <span className="font-bold text-gray-900 text-sm">{c.user.name}</span>
                                  <span className="text-xs text-gray-400 font-medium">• {c.time}</span>
