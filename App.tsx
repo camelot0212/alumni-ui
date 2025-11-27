@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Share2, Bell, MoreVertical, X, ImageIcon, MapPin, Phone, Mail } from 'lucide-react';
+import { ArrowLeft, Share2, Bell } from 'lucide-react';
 import { UIProvider, useUI } from './context/UIContext';
 import { Sidebar, BottomNav } from './components/Navigation';
-import { USERS, MOCK_POSTS } from './constants';
+import { MOCK_POSTS } from './constants';
 import PostCard from './components/PostCard';
+import CreatePostModal from './components/CreatePostModal';
 
 // Pages
 import { AuthPage } from './pages/AuthPage';
@@ -17,59 +18,6 @@ import EventDetailPage from './pages/EventDetailPage';
 
 // --- Modals (Keep simple ones here or extract further) ---
 
-const CreatePostModal = () => {
-  const { isCreatePostOpen, closeCreatePost } = useUI();
-  const [text, setText] = useState('');
-
-  if (!isCreatePostOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden scale-100 animate-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <h3 className="font-bold text-lg text-gray-900">Create Post</h3>
-          <button onClick={closeCreatePost} className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100">
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-        
-        <div className="p-4">
-          <div className="flex gap-3 mb-4">
-            <img src={USERS.me.avatar} alt="Me" className="w-10 h-10 rounded-full object-cover" />
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900 text-sm">{USERS.me.name}</p>
-              <button className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded flex items-center gap-1 mt-0.5">
-                General <MoreVertical className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-          
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="What do you want to share with the alumni network?"
-            className="w-full h-32 resize-none text-gray-800 placeholder:text-gray-400 focus:outline-none text-base leading-relaxed"
-            autoFocus
-          />
-        </div>
-
-        <div className="p-4 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
-          <div className="flex gap-4">
-            <button className="text-gray-500 hover:text-indigo-600 transition-colors"><ImageIcon className="w-6 h-6" /></button>
-            <button className="text-gray-500 hover:text-indigo-600 transition-colors"><MapPin className="w-6 h-6" /></button>
-          </div>
-          <button 
-            onClick={closeCreatePost}
-            className="px-6 py-2 rounded-full font-semibold text-sm bg-indigo-600 text-white shadow-lg shadow-indigo-200 hover:scale-105 active:scale-95 transition-all"
-          >
-            Post
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ContactModal = () => {
   const { contactUser, closeContactModal } = useUI();
   if (!contactUser) return null;
@@ -77,12 +25,15 @@ const ContactModal = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+        // ... (Modal Content kept same as provided file, but for brevity assume it's here or I can implement full if needed. The prompt implies just swapping CreatePostModal) ...
+        {/* RE-IMPLEMENTING FULL CONTACT MODAL CONTENT TO BE SAFE */}
         <div className="relative h-24 bg-gradient-to-r from-indigo-500 to-purple-600">
           <button 
             onClick={closeContactModal}
             className="absolute top-3 right-3 bg-black/20 text-white p-1 rounded-full hover:bg-black/30 transition-colors"
           >
-            <X className="w-5 h-5" />
+            {/* X Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
           </button>
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
             <img src={contactUser.avatar} alt={contactUser.name} className="w-20 h-20 rounded-full border-4 border-white shadow-md" />
@@ -96,7 +47,8 @@ const ContactModal = () => {
           <div className="space-y-3">
             <a href={`tel:+84999999999`} className="flex items-center gap-4 p-3 rounded-xl border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50 transition-all group">
               <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Phone className="w-5 h-5" />
+                {/* Phone Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </div>
               <div className="text-left">
                 <p className="text-xs text-gray-500 font-semibold uppercase">Mobile</p>
@@ -106,7 +58,8 @@ const ContactModal = () => {
 
             <a href={`mailto:contact@alumni.com`} className="flex items-center gap-4 p-3 rounded-xl border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50 transition-all group">
               <div className="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Mail className="w-5 h-5" />
+                {/* Mail Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </div>
               <div className="text-left">
                 <p className="text-xs text-gray-500 font-semibold uppercase">Email</p>
