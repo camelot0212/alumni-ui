@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, CheckCircle2, HelpCircle, Send, Image as ImageIcon, X, Megaphone, ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, CheckCircle2, HelpCircle, Send, Image as ImageIcon, X, Megaphone, ChevronDown, ChevronUp, ChevronRight, Heart, Trash2 } from 'lucide-react';
 import { MOCK_EVENTS, USERS } from '../constants';
 
 const EventDetailPage = () => {
@@ -16,6 +16,13 @@ const EventDetailPage = () => {
   const [commentText, setCommentText] = useState('');
   const [attachedImage, setAttachedImage] = useState<string | null>(null);
 
+  // Comments State
+  const [comments, setComments] = useState([
+    { id: 1, user: USERS.u1, content: "Looking forward to this! Will there be parking available?", time: "2h", image: null, likes: 0, isLiked: false },
+    { id: 2, user: USERS.u3, content: "Check out the venue setup from last year!", time: "5h", image: "https://picsum.photos/id/20/400/300", likes: 5, isLiked: true },
+    { id: 3, user: USERS.me, content: "I'll be there early to help set up.", time: "1m", image: null, likes: 0, isLiked: false }
+  ]);
+
   if (!event) return <div>Not found</div>;
 
   const isOrganizer = event.organizer.id === USERS.me.id;
@@ -27,11 +34,6 @@ const EventDetailPage = () => {
     'https://picsum.photos/id/104/300/200'
   ];
 
-  const comments = [
-    { id: 1, user: USERS.u1, content: "Looking forward to this! Will there be parking available?", time: "2h ago", image: null },
-    { id: 2, user: USERS.u3, content: "Check out the venue setup from last year!", time: "5h ago", image: "https://picsum.photos/id/20/400/300" }
-  ];
-
   const updates = Array.from({ length: 5 }).map((_, i) => ({
     id: i,
     text: i === 0 ? "⚠️ We've moved the venue to the Grand Ballroom on the 2nd floor. Please use the East Elevator." : `Update #${i}: Just a reminder to bring your tickets and ID for check-in.`,
@@ -41,6 +43,24 @@ const EventDetailPage = () => {
 
   const handleRsvp = (status: 'going' | 'maybe') => {
     setRsvp(prev => prev === status ? null : status);
+  };
+
+  const handleCommentLike = (commentId: number) => {
+    setComments(prevComments => prevComments.map(c => {
+      if (c.id === commentId) {
+        const newIsLiked = !c.isLiked;
+        return {
+          ...c,
+          isLiked: newIsLiked,
+          likes: newIsLiked ? c.likes + 1 : c.likes - 1
+        };
+      }
+      return c;
+    }));
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    setComments(prev => prev.filter(c => c.id !== commentId));
   };
 
   return (
@@ -130,37 +150,41 @@ const EventDetailPage = () => {
           </div>
 
           <div className="space-y-8">
-             {/* Host Updates - Clean Design, No Timeline Lines */}
+             
+             {/* Announcements - Modern Sleek Design */}
              <section>
                  <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-gray-900 text-lg">Announcements</h3>
                  </div>
                  
-                 {/* Latest Update Card */}
-                 <div className="bg-gradient-to-r from-indigo-50/50 to-white border border-indigo-100 rounded-xl p-5 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
-                       <Megaphone className="w-4 h-4 text-indigo-600" />
+                 {/* Featured Latest Update */}
+                 <div className="bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-100 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                    <div className="flex items-center gap-2 mb-2 relative z-10">
+                       <div className="p-1 rounded bg-indigo-600 text-white">
+                         <Megaphone className="w-3 h-3" />
+                       </div>
                        <span className="text-xs font-bold text-indigo-700 uppercase tracking-wide">Latest Update</span>
                        <span className="text-xs text-gray-400 font-medium">• {updates[0].time}</span>
                     </div>
-                    <p className="text-gray-900 font-medium text-sm leading-relaxed">{updates[0].text}</p>
+                    <p className="text-gray-900 font-medium text-sm leading-relaxed relative z-10 pl-0">{updates[0].text}</p>
                  </div>
 
-                 {/* Expansion Button */}
+                 {/* Expansion Toggle */}
                  {updates.length > 1 && (
                     <div className="mt-4">
                        {!showAllUpdates ? (
                           <button 
                              onClick={() => setShowAllUpdates(true)}
-                             className="text-sm font-semibold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors"
+                             className="text-sm font-bold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors"
                           >
-                             View {updates.length - 1} older updates <ChevronDown className="w-4 h-4" />
+                             View 4 older updates <ChevronDown className="w-4 h-4" />
                           </button>
                        ) : (
-                          <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
+                          <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                             {/* Older Updates List */}
                              {updates.slice(1).map((update) => (
-                                <div key={update.id} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
-                                   <div className="flex items-center justify-between mb-2">
+                                <div key={update.id} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                   <div className="flex items-center gap-2 mb-1">
                                       <span className="text-xs font-bold text-gray-500">Update</span>
                                       <span className="text-xs text-gray-400">{update.time}</span>
                                    </div>
@@ -170,7 +194,7 @@ const EventDetailPage = () => {
                              
                              <button 
                                 onClick={() => setShowAllUpdates(false)}
-                                className="text-sm font-semibold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors pt-2"
+                                className="text-sm font-bold text-gray-500 hover:text-indigo-600 flex items-center gap-2 transition-colors pt-2"
                              >
                                 Show less <ChevronUp className="w-4 h-4" />
                              </button>
@@ -182,9 +206,8 @@ const EventDetailPage = () => {
 
              <div className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-8">
-                   {/* Hosted By - Strictly Above About */}
+                   {/* Hosted By */}
                    <section>
-                      <h3 className="font-bold text-gray-900 text-lg mb-4">Hosted By</h3>
                       <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4 shadow-sm hover:border-indigo-200 transition-colors cursor-pointer group">
                          <img src={event.organizer.avatar} className="w-14 h-14 rounded-full border border-gray-100 group-hover:scale-105 transition-transform" />
                          <div className="flex-1">
@@ -220,17 +243,41 @@ const EventDetailPage = () => {
                 <h3 className="font-bold text-gray-900 text-lg mb-6">Discussion <span className="text-gray-400 text-base font-normal">({comments.length})</span></h3>
                 <div className="space-y-6 mb-8">
                    {comments.map(c => (
-                      <div key={c.id} className="flex gap-3">
-                         <img src={c.user.avatar} className="w-9 h-9 rounded-full border border-gray-100" />
+                      <div key={c.id} className="flex gap-3 items-start">
+                         <img src={c.user.avatar} className="w-9 h-9 rounded-full border border-gray-100 flex-shrink-0" />
                          <div className="flex-1">
-                            <div className="bg-gray-50 rounded-2xl rounded-tl-none px-4 py-3 border border-gray-100">
-                               <div className="flex justify-between items-baseline mb-1">
-                                  <span className="font-bold text-gray-900 text-sm">{c.user.name}</span>
-                                  <span className="text-xs text-gray-400">{c.time}</span>
-                               </div>
-                               <p className="text-gray-700 text-sm">{c.content}</p>
+                            {/* Comment Bubble */}
+                            <div className="bg-gray-50 rounded-2xl rounded-tl-none px-4 py-2.5 border border-gray-100 inline-block relative group min-w-[200px]">
+                               <span className="font-bold text-gray-900 text-sm block mb-0.5">{c.user.name}</span>
+                               <p className="text-gray-800 text-sm leading-relaxed">{c.content}</p>
                                {c.image && (
-                                  <img src={c.image} className="mt-3 rounded-lg w-full max-w-sm object-cover h-40 border border-gray-200" />
+                                  <img src={c.image} className="mt-3 rounded-lg w-full max-w-sm object-cover h-40 border border-gray-200 block" />
+                               )}
+                               
+                               {/* Floating Reaction Badge (Matches Feed Style) */}
+                               {c.likes > 0 && (
+                                 <div className="absolute -bottom-2.5 -right-1 bg-white rounded-full px-1.5 py-0.5 shadow-sm border border-gray-100 flex items-center gap-1 z-10">
+                                   <Heart className="w-3 h-3 fill-current text-pink-600" />
+                                   <span className="text-[10px] font-bold text-gray-600">{c.likes}</span>
+                                 </div>
+                               )}
+                            </div>
+
+                            {/* Interactions Row - Outside Bubble */}
+                            <div className="flex items-center gap-4 mt-1.5 ml-2">
+                               <span className="text-xs font-medium text-gray-400">{c.time}</span>
+                               <button 
+                                 onClick={() => handleCommentLike(c.id)}
+                                 className={`text-xs font-bold flex items-center gap-1 transition-colors ${c.isLiked ? 'text-pink-600' : 'text-gray-500 hover:text-gray-800'}`}
+                               >
+                                 <Heart className={`w-3 h-3 ${c.isLiked ? 'fill-current' : ''}`} />
+                                 Like
+                               </button>
+                               <button className="text-xs font-bold text-gray-500 hover:text-gray-800">Reply</button>
+                               {c.user.id === USERS.me.id && (
+                                  <button onClick={() => handleDeleteComment(c.id)} className="text-xs font-bold text-gray-400 hover:text-red-600 flex items-center gap-1">
+                                    <Trash2 className="w-3 h-3" /> Delete
+                                  </button>
                                )}
                             </div>
                          </div>
