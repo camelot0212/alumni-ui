@@ -1,3 +1,4 @@
+
 export enum PostType {
   GENERAL = 'GENERAL',
   MEDICAL = 'MEDICAL', // Specific logic: Green border, urgent badge
@@ -49,4 +50,55 @@ export interface Event {
   attendees: User[];
   myRsvp: 'going' | 'maybe' | 'not_going' | null;
   organizer: User;
+}
+
+// --- History Feature Types ---
+
+export interface HistoricalPerson {
+  id: string;
+  name: string;
+  role: 'Head Teacher' | 'Class Leader' | 'Notable Alumnus' | 'Homeroom Teacher' | 'Class Monitor' | 'Principal';
+  image: string;
+  isDeceased?: boolean;
+  lifeYears?: string; // e.g. "1950 - 2020"
+  bio: string;
+  contact?: string; // Email or Phone if alive
+}
+
+export interface PressArticle {
+  id: string;
+  title: string;
+  source: string;
+  date: string;
+  image: string;
+  url?: string;
+}
+
+export interface ClassGroup {
+  id: string;
+  name: string; // "12A"
+  fullName: string; // "12A - Advanced Chemistry"
+  major: string; // "Chemistry"
+  image: string; // Class photo
+  formTeacher: HistoricalPerson; // GVCN
+  monitor: HistoricalPerson; // Lop Truong
+  achievements: string[];
+  studentCount: number;
+}
+
+export interface Cohort {
+  id: string; // e.g. "K15"
+  years: string; // e.g. "2000 - 2003"
+  majorId: string; // e.g. "CHEM"
+  heroImage: string;
+  description: string;
+  stats: {
+    students: number;
+    classes: number;
+  };
+  location: string; // e.g. "Old Campus A"
+  principal: HistoricalPerson; // Hieu Truong (Shared)
+  classes: ClassGroup[]; // The list of classes
+  keyFigures: HistoricalPerson[]; // Other key figures
+  press: PressArticle[];
 }

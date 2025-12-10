@@ -15,6 +15,7 @@ import EventsPage from './pages/EventsPage';
 import DirectoryPage from './pages/DirectoryPage';
 import ProfilePage from './pages/ProfilePage';
 import EventDetailPage from './pages/EventDetailPage';
+import HistoryPage from './pages/HistoryPage';
 
 // --- Modals (Keep simple ones here or extract further) ---
 
@@ -25,8 +26,6 @@ const ContactModal = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-        // ... (Modal Content kept same as provided file, but for brevity assume it's here or I can implement full if needed. The prompt implies just swapping CreatePostModal) ...
-        {/* RE-IMPLEMENTING FULL CONTACT MODAL CONTENT TO BE SAFE */}
         <div className="relative h-24 bg-gradient-to-r from-indigo-500 to-purple-600">
           <button 
             onClick={closeContactModal}
@@ -81,6 +80,7 @@ const Layout = () => {
     if (location.pathname === '/') return 'Feed';
     if (location.pathname === '/events') return 'Events';
     if (location.pathname === '/directory') return 'Directory';
+    if (location.pathname === '/history') return 'History';
     if (location.pathname === '/profile') return 'Profile';
     return 'Alumni';
   };
@@ -116,6 +116,7 @@ const Layout = () => {
           <Route path="/" element={<FeedPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/directory" element={<DirectoryPage />} />
+          <Route path="/history" element={<HistoryPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/post/:id" element={<PostCard isDetailView post={MOCK_POSTS[0]} />} />
           <Route path="/event/:id" element={<EventDetailPage />} />
@@ -129,6 +130,7 @@ const Layout = () => {
 };
 
 const App = () => {
+  // Force rebuild timestamp: 1234567891
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   if (!isAuthenticated) return <AuthPage onLogin={() => setIsAuthenticated(true)} />;

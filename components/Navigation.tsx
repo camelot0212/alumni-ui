@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Calendar, Users, UserCircle, PlusSquare } from 'lucide-react';
+import { Home, Calendar, Users, UserCircle, PlusSquare, BookOpen } from 'lucide-react';
 import { useUI } from '../context/UIContext';
 import { USERS } from '../constants';
 
@@ -21,6 +21,7 @@ export const Sidebar = () => {
         <NavLink to="/" className={linkClass}><Home className="w-5 h-5" /> Feed</NavLink>
         <NavLink to="/events" className={linkClass}><Calendar className="w-5 h-5" /> Events</NavLink>
         <NavLink to="/directory" className={linkClass}><Users className="w-5 h-5" /> Directory</NavLink>
+        <NavLink to="/history" className={linkClass}><BookOpen className="w-5 h-5" /> History</NavLink>
         <NavLink to="/profile" className={linkClass}><UserCircle className="w-5 h-5" /> Profile</NavLink>
         <button onClick={openCreatePost} className="w-full mt-6 flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-3 rounded-xl font-semibold hover:bg-indigo-100 transition-colors">
           <PlusSquare className="w-5 h-5" /> Create Post
@@ -54,7 +55,7 @@ export const BottomNav = () => {
         </button>
       </div>
       <NavLink to="/directory" className={linkClass}><Users className="w-6 h-6" /><span className="text-[10px] font-medium mt-1">People</span></NavLink>
-      <NavLink to="/profile" className={linkClass}><UserCircle className="w-6 h-6" /><span className="text-[10px] font-medium mt-1">Profile</span></NavLink>
+      <NavLink to="/history" className={linkClass}><BookOpen className="w-6 h-6" /><span className="text-[10px] font-medium mt-1">History</span></NavLink>
     </div>
   );
 };

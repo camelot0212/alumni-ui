@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { X, Image as ImageIcon, MapPin, AlertCircle, GripHorizontal, Trash2, FileText, HeartPulse, Calendar, Newspaper } from 'lucide-react';
 import { useUI } from '../context/UIContext';
@@ -19,7 +18,7 @@ const CreatePostModal = () => {
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newImages = Array.from(e.target.files).map(file => URL.createObjectURL(file));
+      const newImages = Array.from(e.target.files).map((file: File) => URL.createObjectURL(file));
       setImages(prev => [...prev, ...newImages].slice(0, 10)); // Limit to 10
     }
   };

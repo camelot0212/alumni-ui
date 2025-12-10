@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GraduationCap, Users, Briefcase, ChevronDown, Building2 } from 'lucide-react';
+import { GraduationCap, Users, Briefcase, ChevronDown, Building2, ArrowRight } from 'lucide-react';
 import { useUI } from '../context/UIContext';
 import { USERS } from '../constants';
 
@@ -23,7 +23,7 @@ const DirectoryPage = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto py-6 px-4 pb-24 md:pb-8">
+    <div className="max-w-5xl mx-auto py-6 px-4 pb-32 md:pb-12">
       {/* Filters with horizontal scroll fix */}
       <div className="overflow-x-auto -mx-4 px-4 pb-2 mb-4 no-scrollbar">
         <div className="flex gap-3 w-max">
@@ -56,6 +56,15 @@ const DirectoryPage = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Full List CTA Section */}
+      <div className="mt-10 p-8 bg-white rounded-2xl border border-gray-200 shadow-sm text-center">
+        <h3 className="text-xl font-bold text-gray-900 mb-2">Looking for someone else?</h3>
+        <p className="text-gray-500 mb-6">Browse the complete archive of all registered alumni in the database.</p>
+        <button className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-50 text-indigo-700 font-bold rounded-xl border border-indigo-100 hover:bg-indigo-100 hover:border-indigo-200 transition-all w-full sm:w-auto">
+           Check full list of students <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
